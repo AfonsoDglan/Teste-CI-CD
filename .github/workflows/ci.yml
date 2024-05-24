@@ -23,3 +23,11 @@ jobs:
           cache: 'npm'
       - run: npm i
       - run: npm run test
+
+      - name: Generate tag
+        id: generate_tag
+        run: |
+          SHA=$(echo $GITHUB_SHA | head -c7)
+          echo "sha=$SHA" >> $GITHUB_OUTPUT
+      - name: 'Build docker image'
+        run: docker build -t ci-api:${{ steps.generate_tag.outputs.sha}} .
